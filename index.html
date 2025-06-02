@@ -1,16 +1,994 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/jmm-logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JMM - Materials Science Intelligence Platform</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-deep-space">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JMM - 材料科学智能平台</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: #0F172A;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .quantum-blue {
+            color: #00E5FF;
+        }
+        
+        .bg-quantum-blue {
+            background-color: #00E5FF;
+        }
+        
+        .lattice-purple {
+            color: #7B61FF;
+        }
+        
+        .plasma-pink {
+            color: #FF2A6D;
+        }
+        
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 229, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
+        }
+        
+        .particle-text {
+            background: linear-gradient(90deg, #00E5FF, #7B61FF, #FF2A6D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: particleFlow 8s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes particleFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        #three-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 0.75rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transform-origin: top;
+            transform: scaleY(0);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 100;
+        }
+        
+        .mobile-menu.active {
+            transform: scaleY(1);
+            opacity: 1;
+        }
+        
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #00E5FF 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10,10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+        
+        .ripple:active:after {
+            transform: scale(0,0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+        
+        .search-input {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #00E5FF;
+            box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2);
+        }
+        
+        .periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 4px;
+        }
+        
+        .element {
+            padding: 8px 4px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .element:hover {
+            background: rgba(0, 229, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .element-symbol {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .element-number {
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+        
+        .chat-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .user-bubble {
+            background: rgba(123, 97, 255, 0.2);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            margin-left: auto;
+        }
+        
+        .assistant-bubble {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            margin-right: auto;
+        }
+        
+        .loading-dots {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 24px;
+        }
+        
+        .loading-dots div {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00E5FF;
+            animation: loading-dots 1.2s linear infinite;
+        }
+        
+        .loading-dots div:nth-child(1) {
+            left: 8px;
+            animation-delay: 0s;
+        }
+        
+        .loading-dots div:nth-child(2) {
+            left: 32px;
+            animation-delay: 0.4s;
+        }
+        
+        .loading-dots div:nth-child(3) {
+            left: 56px;
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes loading-dots {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Three.js 背景容器 -->
+    <div id="three-container"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="nav-glass sticky top-0 z-50 p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold quantum-blue mr-2">
+                    JMM
+                </div>
+                <span class="text-sm opacity-70">材料科学智能平台</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-300 hover:text-white transition-colors">首页</a>
+                <a href="#database" class="text-gray-300 hover:text-white transition-colors">数据库</a>
+                <a href="#assistant" class="text-gray-300 hover:text-white transition-colors">问答助手</a>
+                <a href="#submit" class="text-gray-300 hover:text-white transition-colors">数据提交</a>
+                <a href="#lab" class="text-gray-300 hover:text-white transition-colors">实验室</a>
+            </div>
+            
+            <button class="md:hidden text-gray-300 focus:outline-none" id="mobileMenuButton" aria-label="导航菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- 移动端导航菜单 -->
+            <div class="mobile-menu md:hidden" id="mobileMenu">
+                <a href="#home" class="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    <i class="fas fa-home mr-2"></i>首页
+                </a>
+                <a href="#database" class="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    <i class="fas fa-database mr-2"></i>数据库
+                </a>
+                <a href="#assistant" class="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    <i class="fas fa-robot mr-2"></i>问答助手
+                </a>
+                <a href="#submit" class="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    <i class="fas fa-upload mr-2"></i>数据提交
+                </a>
+                <a href="#lab" class="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    <i class="fas fa-flask mr-2"></i>实验室
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 英雄区 -->
+    <section id="home" class="relative py-20 px-4 md:px-8">
+        <div class="container mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 particle-text">
+                Materials Intelligence Revolution
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-12">
+                10万+开源文献 | AI科研助手
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <button class="ripple bg-quantum-blue text-gray-900 font-bold py-3 px-8 rounded-full btn-glow">
+                    探索数据库
+                </button>
+                <button class="ripple bg-transparent border-2 border-quantum-blue text-quantum-blue font-bold py-3 px-8 rounded-full btn-glow">
+                    提问助手
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 数据库模块 -->
+    <section id="database" class="py-16 px-4 md:px-8">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center quantum-blue">
+                <i class="fas fa-database mr-2"></i>材料科学文献数据库
+            </h2>
+            
+            <!-- 搜索栏 -->
+            <div class="glassmorphism p-6 mb-8">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input type="text" placeholder="搜索文献、材料、作者..." class="search-input flex-grow px-4 py-3 rounded-lg text-white focus:outline-none">
+                    <button class="bg-quantum-blue text-gray-900 font-bold py-3 px-6 rounded-lg ripple">
+                        <i class="fas fa-search mr-2"></i>搜索
+                    </button>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">钙钛矿</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">石墨烯</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">太阳能电池</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">纳米材料</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">催化剂</span>
+                </div>
+            </div>
+            
+            <!-- 文献卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glassmorphism p-6 card-hover">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">新型钙钛矿太阳能电池界面工程</h3>
+                            <p class="text-sm text-gray-400">Zhang, L., Wang, Q. et al.</p>
+                        </div>
+                        <span class="px-2 py-1 bg-gray-800 text-quantum-blue text-xs rounded">DOI:10.1039/d3ta01234k</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span>结构: <span class="text-quantum-blue">Perovskite_Cubic</span></span>
+                            <span>发表日期: 2023-05-15</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">带隙</span>
+                                <span class="text-quantum-blue">1.65eV</span>
+                            </div>
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">效率</span>
+                                <span class="text-quantum-blue">25.3%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-transparent border border-quantum-blue text-quantum-blue py-2 rounded-lg ripple hover:bg-quantum-blue hover:text-gray-900 transition-colors">
+                        查看3D结构
+                    </button>
+                </div>
+                
+                <div class="glassmorphism p-6 card-hover">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">石墨烯量子点的可控合成与光学特性</h3>
+                            <p class="text-sm text-gray-400">Li, H., Chen, W. et al.</p>
+                        </div>
+                        <span class="px-2 py-1 bg-gray-800 text-quantum-blue text-xs rounded">DOI:10.1021/acs.nanolett.2c04567</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span>结构: <span class="text-quantum-blue">Graphene_Quantum_Dot</span></span>
+                            <span>发表日期: 2022-11-30</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">荧光量子产率</span>
+                                <span class="text-quantum-blue">78%</span>
+                            </div>
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">尺寸</span>
+                                <span class="text-quantum-blue">3.2nm</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-transparent border border-quantum-blue text-quantum-blue py-2 rounded-lg ripple hover:bg-quantum-blue hover:text-gray-900 transition-colors">
+                        查看3D结构
+                    </button>
+                </div>
+                
+                <div class="glassmorphism p-6 card-hover">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">MOFs材料在CO2捕获中的应用</h3>
+                            <p class="text-sm text-gray-400">Wang, Y., Liu, J. et al.</p>
+                        </div>
+                        <span class="px-2 py-1 bg-gray-800 text-quantum-blue text-xs rounded">DOI:10.1016/j.cej.2023.142536</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span>结构: <span class="text-quantum-blue">ZIF-8</span></span>
+                            <span>发表日期: 2023-03-10</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">比表面积</span>
+                                <span class="text-quantum-blue">1638m²/g</span>
+                            </div>
+                            <div class="bg-gray-800 p-2 rounded">
+                                <span class="block text-gray-400">CO2吸附量</span>
+                                <span class="text-quantum-blue">4.2mmol/g</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-transparent border border-quantum-blue text-quantum-blue py-2 rounded-lg ripple hover:bg-quantum-blue hover:text-gray-900 transition-colors">
+                        查看3D结构
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 数据可视化 -->
+            <div class="glassmorphism p-6 mt-8">
+                <h3 class="text-xl font-bold mb-4">文献分布可视化</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-800 rounded-lg p-4 h-64">
+                        <p class="text-center text-gray-400">期刊分布雷达图</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-4 h-64">
+                        <p class="text-center text-gray-400">年度趋势热力图</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 问答助手区 -->
+    <section id="assistant" class="py-16 px-4 md:px-8 bg-gray-900">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center quantum-blue">
+                <i class="fas fa-robot mr-2"></i>科研问答助手
+            </h2>
+            
+            <div class="glassmorphism p-6">
+                <div class="flex flex-col h-96 overflow-y-auto mb-4 p-4 bg-gray-800 rounded-lg">
+                    <div class="assistant-bubble">
+                        <p>您好！我是JMM科研助手，可以为您解答材料科学相关问题。我可以：</p>
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>解析材料结构与性能关系</li>
+                            <li>提供相关文献推荐</li>
+                            <li>解释专业术语和概念</li>
+                            <li>帮助分析实验数据</li>
+                        </ul>
+                        <p class="mt-2">请问有什么可以帮您的？</p>
+                    </div>
+                    
+                    <div class="user-bubble">
+                        <p>钙钛矿太阳能电池的稳定性问题有哪些解决方案？</p>
+                    </div>
+                    
+                    <div class="assistant-bubble">
+                        <p>钙钛矿太阳能电池的稳定性改进方案主要包括：</p>
+                        <ol class="list-decimal pl-5 mt-2">
+                            <li><strong>界面工程</strong>：使用疏水材料如2D钙钛矿作为保护层</li>
+                            <li><strong>组分调控</strong>：引入Cs⁺、Rb⁺等离子混合A位阳离子</li>
+                            <li><strong>封装技术</strong>：开发新型气密性封装材料</li>
+                            <li><strong>添加剂策略</strong>：添加抗氧化剂如BHT</li>
+                        </ol>
+                        <p class="mt-2">相关文献：<span class="text-quantum-blue underline cursor-pointer">"Enhanced stability of perovskite solar cells" (Nature Energy, 2022)</span></p>
+                    </div>
+                    
+                    <div id="loading-indicator" class="assistant-bubble hidden">
+                        <div class="loading-dots">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex">
+                    <input type="text" placeholder="输入您的问题..." class="search-input flex-grow px-4 py-3 rounded-l-lg text-white focus:outline-none">
+                    <button class="bg-quantum-blue text-gray-900 font-bold py-3 px-6 rounded-r-lg ripple">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm cursor-pointer">公式识别</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm cursor-pointer">结构解析</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm cursor-pointer">文献引用</span>
+                    <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm cursor-pointer">数据可视化</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 材料宇宙导航 -->
+    <section id="periodic-table" class="py-16 px-4 md:px-8">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center quantum-blue">
+                <i class="fas fa-atom mr-2"></i>材料宇宙导航
+            </h2>
+            
+            <div class="glassmorphism p-6 overflow-x-auto">
+                <div class="periodic-table" style="min-width: 1000px;">
+                    <!-- 周期表行1 -->
+                    <div class="element col-span-1">
+                        <div class="element-number">1</div>
+                        <div class="element-symbol">H</div>
+                        <div class="element-name text-xs">氢</div>
+                    </div>
+                    <div class="element col-span-16"></div>
+                    <div class="element">
+                        <div class="element-number">2</div>
+                        <div class="element-symbol">He</div>
+                        <div class="element-name text-xs">氦</div>
+                    </div>
+                    
+                    <!-- 周期表行2 -->
+                    <div class="element">
+                        <div class="element-number">3</div>
+                        <div class="element-symbol">Li</div>
+                        <div class="element-name text-xs">锂</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">4</div>
+                        <div class="element-symbol">Be</div>
+                        <div class="element-name text-xs">铍</div>
+                    </div>
+                    <div class="element col-span-10"></div>
+                    <div class="element">
+                        <div class="element-number">5</div>
+                        <div class="element-symbol">B</div>
+                        <div class="element-name text-xs">硼</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">6</div>
+                        <div class="element-symbol">C</div>
+                        <div class="element-name text-xs">碳</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">7</div>
+                        <div class="element-symbol">N</div>
+                        <div class="element-name text-xs">氮</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">8</div>
+                        <div class="element-symbol">O</div>
+                        <div class="element-name text-xs">氧</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">9</div>
+                        <div class="element-symbol">F</div>
+                        <div class="element-name text-xs">氟</div>
+                    </div>
+                    <div class="element">
+                        <div class="element-number">10</div>
+                        <div class="element-symbol">Ne</div>
+                        <div class="element-name text-xs">氖</div>
+                    </div>
+                    
+                    <!-- 其他元素省略... -->
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="font-bold text-quantum-blue mb-2">碳 (C)</h4>
+                        <p class="text-sm text-gray-300">相关文献: 1289篇</p>
+                        <p class="text-sm text-gray-300 mt-2">石墨烯、碳纳米管、金刚石等碳材料研究</p>
+                        <button class="mt-2 text-xs text-quantum-blue hover:underline">查看全部</button>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="font-bold text-quantum-blue mb-2">硅 (Si)</h4>
+                        <p class="text-sm text-gray-300">相关文献: 876篇</p>
+                        <p class="text-sm text-gray-300 mt-2">半导体、太阳能电池、硅基材料</p>
+                        <button class="mt-2 text-xs text-quantum-blue hover:underline">查看全部</button>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="font-bold text-quantum-blue mb-2">钛 (Ti)</h4>
+                        <p class="text-sm text-gray-300">相关文献: 543篇</p>
+                        <p class="text-sm text-gray-300 mt-2">钛合金、二氧化钛、医用钛材料</p>
+                        <button class="mt-2 text-xs text-quantum-blue hover:underline">查看全部</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 数据提交 -->
+    <section id="submit" class="py-16 px-4 md:px-8 bg-gray-900">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center quantum-blue">
+                <i class="fas fa-upload mr-2"></i>数据提交
+            </h2>
+            
+            <div class="glassmorphism p-6 max-w-3xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">提交您的科研成果</h3>
+                        <p class="text-gray-300 mb-6">分享您的研究数据，为材料科学社区做出贡献。提交的数据将经过审核后加入我们的开放数据库。</p>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-400 mb-2">上传结构文件</label>
+                            <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center cursor-pointer hover:border-quantum-blue transition-colors">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
+                                <p class="text-gray-400">拖放文件或点击上传</p>
+                                <p class="text-xs text-gray-500 mt-2">支持CIF, XYZ, PDB等格式</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="mb-4">
+                            <label class="block text-gray-400 mb-2">文献标题</label>
+                            <input type="text" class="search-input w-full px-4 py-2 rounded-lg">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-400 mb-2">作者</label>
+                            <input type="text" class="search-input w-full px-4 py-2 rounded-lg">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-400 mb-2">DOI</label>
+                            <input type="text" class="search-input w-full px-4 py-2 rounded-lg">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-400 mb-2">材料类型</label>
+                            <select class="search-input w-full px-4 py-2 rounded-lg">
+                                <option>金属</option>
+                                <option>半导体</option>
+                                <option>陶瓷</option>
+                                <option>聚合物</option>
+                                <option>复合材料</option>
+                            </select>
+                        </div>
+                        
+                        <button class="w-full bg-quantum-blue text-gray-900 font-bold py-3 rounded-lg ripple">
+                            提交数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 实验室 -->
+    <section id="lab" class="py-16 px-4 md:px-8">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center quantum-blue">
+                <i class="fas fa-flask mr-2"></i>实验室
+            </h2>
+            
+            <div class="glassmorphism p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 p-6 rounded-lg card-hover">
+                        <div class="w-12 h-12 bg-quantum-blue text-gray-900 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-2">材料计算器</h3>
+                        <p class="text-gray-400 text-sm text-center">带隙计算、晶格常数转换、单位换算等实用工具</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-6 rounded-lg card-hover">
+                        <div class="w-12 h-12 bg-lattice-purple text-gray-900 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-2">结构可视化</h3>
+                        <p class="text-gray-400 text-sm text-center">上传结构文件进行3D可视化与基本分析</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-6 rounded-lg card-hover">
+                        <div class="w-12 h-12 bg-plasma-pink text-gray-900 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-2">数据分析</h3>
+                        <p class="text-gray-400 text-sm text-center">XRD、Raman等谱图分析与拟合工具</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">科研仪器HUD</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-gray-900 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold quantum-blue">10,289</div>
+                            <div class="text-sm text-gray-400">今日访问</div>
+                        </div>
+                        <div class="bg-gray-900 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold quantum-blue">3,452</div>
+                            <div class="text-sm text-gray-400">文献查询</div>
+                        </div>
+                        <div class="bg-gray-900 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold quantum-blue">128</div>
+                            <div class="text-sm text-gray-400">新增数据</div>
+                        </div>
+                        <div class="bg-gray-900 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold quantum-blue">87</div>
+                            <div class="text-sm text-gray-400">问答请求</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 py-8 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="text-2xl font-bold quantum-blue">JMM</div>
+                    <p class="text-gray-400 text-sm">材料科学智能平台</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-researchgate"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">关于我们</h4>
+                        <p class="text-gray-400 text-sm">JMM平台致力于推动材料科学研究的数据共享与AI辅助，构建开放的科学社区。</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">快速链接</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">API文档</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">数据使用协议</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">隐私政策</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">联系我们</h4>
+                        <ul class="space-y-2">
+                            <li class="text-gray-400 text-sm"><i class="fas fa-envelope mr-2"></i> contact@jmm-materials.org</li>
+                            <li class="text-gray-400 text-sm"><i class="fas fa-map-marker-alt mr-2"></i> 上海市材料科学研究院</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center text-gray-500 text-xs">
+                <p>© 2024 JMM Materials Intelligence Platform. All rights reserved.</p>
+                <p class="mt-2">created by <a href="https://space.coze.cn" class="hover:text-quantum-blue transition-colors">coze space</a> | 页面内容均由 AI 生成，仅供参考</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 移动端菜单切换
+        const menuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            
+            // 切换图标
+            const icon = this.querySelector('i');
+            if (mobileMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // 点击导航链接后关闭移动端菜单
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    const icon = menuButton.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+        
+        // Three.js 背景初始化
+        const initThreeBackground = () => {
+            const container = document.getElementById('three-container');
+            if (!container) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            
+            // 创建原子模型
+            const createAtom = (x, y, z, color) => {
+                const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: color,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.set(x, y, z);
+                scene.add(sphere);
+                
+                // 电子轨道
+                const orbitGeometry = new THREE.TorusGeometry(1.5, 0.02, 16, 100);
+                const orbitMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00E5FF,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                orbit.rotation.x = Math.random() * Math.PI;
+                orbit.rotation.y = Math.random() * Math.PI;
+                sphere.add(orbit);
+                
+                return sphere;
+            };
+            
+            // 创建多个原子
+            const atoms = [];
+            const colors = [0x00E5FF, 0x7B61FF, 0xFF2A6D];
+            
+            for (let i = 0; i < 15; i++) {
+                const x = (Math.random() - 0.5) * 20;
+                const y = (Math.random() - 0.5) * 20;
+                const z = (Math.random() - 0.5) * 20;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                atoms.push(createAtom(x, y, z, color));
+            }
+            
+            camera.position.z = 5;
+            
+            // 动画循环
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                // 旋转原子和轨道
+                atoms.forEach(atom => {
+                    atom.rotation.x += 0.005;
+                    atom.rotation.y += 0.005;
+                    
+                    // 旋转轨道
+                    if (atom.children.length > 0) {
+                        atom.children[0].rotation.x += 0.01;
+                    }
+                });
+                
+                renderer.render(scene, camera);
+            };
+            
+            animate();
+            
+            // 窗口大小调整
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+        
+        // 页面加载后初始化Three.js背景
+        document.addEventListener('DOMContentLoaded', initThreeBackground);
+        
+        // 问答助手交互
+        const chatInput = document.querySelector('#assistant input[type="text"]');
+        const chatSendBtn = document.querySelector('#assistant button');
+        const chatContainer = document.querySelector('#assistant .flex.flex-col');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        
+        chatSendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // 添加用户消息
+            const userBubble = document.createElement('div');
+            userBubble.className = 'user-bubble';
+            userBubble.innerHTML = `<p>${message}</p>`;
+            chatContainer.appendChild(userBubble);
+            
+            // 显示加载指示器
+            loadingIndicator.classList.remove('hidden');
+            
+            // 清空输入框
+            chatInput.value = '';
+            
+            // 模拟AI回复
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                
+                // 添加AI回复
+                const assistantBubble = document.createElement('div');
+                assistantBubble.className = 'assistant-bubble';
+                
+                // 简单回复逻辑
+                if (message.toLowerCase().includes('钙钛矿')) {
+                    assistantBubble.innerHTML = `
+                        <p>钙钛矿材料(ABX₃结构)是当前研究热点，特别是在太阳能电池领域。其典型特性包括：</p>
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>高光吸收系数</li>
+                            <li>可调带隙(1.2-2.3eV)</li>
+                            <li>低成本溶液法制备</li>
+                        </ul>
+                        <p class="mt-2">相关文献: <span class="text-quantum-blue underline cursor-pointer">"Perovskite solar cells" (Science, 2023)</span></p>
+                    `;
+                } else if (message.toLowerCase().includes('石墨烯')) {
+                    assistantBubble.innerHTML = `
+                        <p>石墨烯是由单层碳原子组成的二维材料，具有以下卓越性能：</p>
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>超高载流子迁移率(200,000 cm²/V·s)</li>
+                            <li>优异机械强度(130GPa)</li>
+                            <li>高热导率(5000W/m·K)</li>
+                        </ul>
+                        <p class="mt-2">您可以参考: <span class="text-quantum-blue underline cursor-pointer">"Graphene: Status and Prospects" (Nature, 2021)</span></p>
+                    `;
+                } else {
+                    assistantBubble.innerHTML = `
+                        <p>我已收到您关于"${message}"的查询。作为材料科学助手，我可以:</p>
+                        <ol class="list-decimal pl-5 mt-2">
+                            <li>解释相关概念和原理</li>
+                            <li>提供材料性能数据</li>
+                            <li>推荐相关研究文献</li>
+                            <li>分析实验方法和结果</li>
+                        </ol>
+                        <p class="mt-2">请告诉我您需要哪方面的帮助？</p>
+                    `;
+                }
+                
+                chatContainer.appendChild(assistantBubble);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1500);
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
 </html>
