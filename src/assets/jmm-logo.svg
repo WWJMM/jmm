@@ -1,0 +1,14 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="48" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.8"/>
+  <circle cx="50" cy="50" r="40" stroke="#7B61FF" stroke-width="1.5" stroke-opacity="0.6"/>
+  <circle cx="50" cy="50" r="30" stroke="#FF2A6D" stroke-width="1" stroke-opacity="0.4"/>
+  <circle cx="34" cy="36" r="6" fill="#00E5FF"/>
+  <circle cx="66" cy="36" r="6" fill="#7B61FF"/>
+  <circle cx="50" cy="66" r="6" fill="#FF2A6D"/>
+  <path d="M34 36L66 36" stroke="#00E5FF" stroke-width="1.5"/>
+  <path d="M34 36L50 66" stroke="#7B61FF" stroke-width="1.5"/>
+  <path d="M66 36L50 66" stroke="#FF2A6D" stroke-width="1.5"/>
+  <text x="23" y="40" font-family="Orbitron" font-size="8" fill="#00E5FF">J</text>
+  <text x="65" y="40" font-family="Orbitron" font-size="8" fill="#7B61FF">M</text>
+  <text x="48" y="70" font-family="Orbitron" font-size="8" fill="#FF2A6D">M</text>
+</svg>
