@@ -56,12 +56,38 @@
         }
         
         .glassmorphism {
-            background: linear-gradient(135deg, rgba(25, 30, 50, 0.9), rgba(15, 20, 35, 0.8)) !important;
-            backdrop-filter: blur(12px) saturate(180%) !important;
+            background: linear-gradient(135deg, rgba(25, 30, 50, 0.7), rgba(15, 20, 35, 0.5)) !important;
+            backdrop-filter: blur(16px) saturate(200%) !important;
             border-radius: 12px;
-            border: 1px solid rgba(0, 229, 255, 0.2);
-            box-shadow: var(--glass-shadow);
-            transition: var(--transition-default);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        .profile-card {
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+            overflow: visible !important;
+        }
+        
+        .glassmorphism::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, transparent 50%, rgba(123, 97, 255, 0.1) 100%);
+            transform: rotate(-5deg);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        
+        .glassmorphism:hover::before {
+            opacity: 1;
         }
         
         .quantum-blue {
@@ -106,11 +132,25 @@
         }
         
         .card-hover:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 229, 255, 0.3);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(135deg, rgba(30, 35, 55, 0.95), rgba(20, 25, 40, 0.85));
-        }
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+    border: 1px solid rgba(94, 234, 212, 0.3);
+    transition: all 0.3s ease;
+}
+
+.timeline-line {
+    width: 2px;
+    border-radius: 1px;
+}
+
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    z-index: 1;
+}
+           
         
         .particle-text {
             background: linear-gradient(90deg, #00E5FF, #7B61FF, #FF2A6D);
@@ -151,6 +191,101 @@
         
         .element:hover {
             background: rgba(0, 229, 255, 0.1);
+        }
+
+        /* 周期表元素样式 */
+        .periodic-element {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .periodic-element:hover {
+            transform: scale(1.15);
+            z-index: 10;
+            border-color: rgba(0, 229, 255, 0.6);
+        }
+
+        /* 增强状态效果与毛玻璃的结合 */
+        .periodic-element.state-solid:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 127, 0.6);
+        }
+        
+        .periodic-element.state-liquid:hover {
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.6);
+        }
+        
+        .periodic-element.state-gas:hover {
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+        }
+        
+        .periodic-element.state-artificial:hover {
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+        }
+
+        /* 元素状态荧光背景 */
+        .state-solid {
+            box-shadow: 0 0 15px rgba(0, 255, 127, 0.5);
+        }
+
+        .state-liquid {
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+
+        .state-gas {
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+        }
+
+        .state-artificial {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .element-detail {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+
+        .element-detail h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #00E5FF;
+        }
+
+        .element-detail p {
+            margin-bottom: 8px;
+        }
+
+        .element-detail .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #00E5FF;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 50;
+            display: none;
         }
         
         .user-bubble {
@@ -196,6 +331,17 @@
         .sidebar.collapsed {
             width: 70px;
         }
+
+        /* 修复折叠后logo位置下移问题 */
+        .sidebar.collapsed .sidebar-header {
+            height: 80px;
+            align-items: center;
+        }
+
+        .sidebar.collapsed .sidebar-logo {
+            align-items: center;
+            flex-shrink: 0;
+        }
         
         .sidebar-header {
             padding: 20px 15px;
@@ -203,22 +349,36 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            height: 80px;
+            transition: all 0.2s ease;
         }
         
         .sidebar-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             font-weight: bold;
-            font-size: 1.2rem;
-            color: #00e5ff;
-            transition: opacity 0.3s ease;
+            font-size: 2rem;
+            background: linear-gradient(90deg, #00E5FF, #b874f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-logo i {
+            font-size: 2rem;
         }
         
         .sidebar.collapsed .sidebar-logo span {
             opacity: 0;
             width: 0;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-logo span {
+            transition: all 0.4s ease;
         }
         
         .toggle-btn {
@@ -618,11 +778,11 @@
                         </div>
                         
                         <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">稀有气体分离</span>
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">海水提铀</span>
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">固态电解质</span>
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">机器学习</span>
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">电解液</span>
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">钙钛矿</span>
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">石墨烯</span>
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">太阳能电池</span>
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">纳米材料</span>
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">催化剂</span>
                         </div>
                     </div>
                     
@@ -663,7 +823,7 @@
                         <div class="glassmorphism p-6 card-hover">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 class="text-xl font-bold mb-1">石墨烯量子点</h3>
+                                    <h3 class="text-xl font-bold mb-1">石墨烯量子点的可控合成与光学特性</h3>
                                     <p class="text-sm text-gray-400">Li, H., Chen, W. et al.</p>
                                 </div>
                                 <span class="px-2 py-1 bg-gray-800 text-quantum-blue text-xs rounded">DOI:10.1021/acs.nanolett.2c04567</span>
@@ -724,18 +884,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- 数据可视化 -->
-                    <div class="glassmorphism p-6 mt-8">                
-                        <h3 class="text-xl font-bold mb-4">文献分布可视化</h3>                 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-gray-800 rounded-lg p-4 h-64">
-                                <p class="text-center text-gray-400">期刊分布雷达图</p>
-                            </div>
-                            <div class="bg-gray-800 rounded-lg p-4 h-64">
-                                <p class="text-center text-gray-400">年度趋势热力图</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -754,7 +902,7 @@
                             <div class="w-full md:w-7/12">
                                 <div class="flex flex-col h-96 overflow-y-auto mb-4 p-4 bg-gray-800 rounded-lg" id="chatContainer">
                                     <div class="assistant-bubble p-4 rounded-lg mb-4">
-                                        <p>您好！我是您的科研助手，可以为您解答材料科学相关问题。请问有什么可以帮您的？</p>
+                                        <p>您好！我是JMM科研助手，可以为您解答材料科学相关问题。请问有什么可以帮您的？</p>
                                     </div>
                                 </div>
                                 
@@ -776,47 +924,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <script>
-                                // JavaScript 逻辑
-                                document.getElementById('sendBtn').addEventListener('click', async () => {
-                                    const userInput = document.getElementById('userInput');
-                                    const question = userInput.value.trim();
-                                    if (!question) return;
-                                    
-                                    // 显示用户问题
-                                    const chatContainer = document.getElementById('chatContainer');
-                                    chatContainer.innerHTML += `
-                                        <div class="user-bubble">
-                                            <p>${question}</p>
-                                        </div>
-                                    `;
-                                    userInput.value = '';
-                                    
-                                    // 调用后端 API
-                                    try {
-                                        const response = await fetch('http://localhost:5000/ask', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ question })
-                                        });
-                                        const data = await response.json();
-                                        // 显示回答
-                                        chatContainer.innerHTML += `
-                                            <div class="assistant-bubble">
-                                                <p>${data.answer}</p>
-                                            </div>
-                                        `;
-                                        // 滚动到最新消息
-                                        chatContainer.scrollTop = chatContainer.scrollHeight;
-                                    } catch (error) {
-                                        chatContainer.innerHTML += `
-                                            <div class="assistant-bubble">
-                                                <p>抱歉，暂时无法获取回答。</p>
-                                            </div>
-                                        `;
-                                    }
-                                });
-                            </script>
                             
                             <!-- 知识图谱区域 -->
                             <div class="w-full md:w-5/12">
@@ -843,6 +950,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -851,7 +959,7 @@
         </section>
         
         <!-- 材料宇宙导航 -->
-        <section id="periodic" class="animated-section section-hidden">
+        <section id="periodic" class="animated-section section-hidden reveal-on-scroll">
             <div class="container mx-auto px-4 md:px-8 py-8">
                 <div class="section-content">
                     <h2 class="text-3xl font-bold quantum-blue mb-6 pb-4 border-b border-gray-700">
@@ -860,65 +968,642 @@
                     
                     <div class="glassmorphism p-6">
                         <div class="overflow-x-auto">
-                            <div class="periodic-table inline-grid grid-cols-18 gap-1 min-w-max">
-                                <!-- 周期表元素... (与原始内容相同) -->
-                                 <!-- 周期表行1 -->
-                                <div class="element col-span-1">
-                                    <div class="element-number">1</div>
-                                    <div class="element-symbol">H</div>
-                                    <div class="element-name text-xs">氢</div>
+                            <div class="periodic-table grid grid-cols-18 gap-1 min-w-max">
+                                <!-- 周期表头部 - 空单元格 -->
+                                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                 
+                                <!-- 第一周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="H" style="grid-column: 1; grid-row: 2;">
+                                    <div class="text-xs text-gray-400">1</div>
+                                    <div class="text-lg font-bold">H</div>
+                                    <div class="text-xs text-gray-400">氢</div>
                                 </div>
-                                <div class="element col-span-16"></div>
-                                <div class="element">
-                                    <div class="element-number">2</div>
-                                    <div class="element-symbol">He</div>
-                                    <div class="element-name text-xs">氦</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="He" style="grid-column: 18; grid-row: 2;">
+                                    <div class="text-xs text-gray-400">2</div>
+                                    <div class="text-lg font-bold">He</div>
+                                    <div class="text-xs text-gray-400">氦</div>
                                 </div>
-                                
-                    <!-- 周期表行2 -->
-                                <div class="element">
-                                    <div class="element-number">3</div>
-                                    <div class="element-symbol">Li</div>
-                                    <div class="element-name text-xs">锂</div>
+                                 
+                                <!-- 第二周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Li" style="grid-column: 1; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">3</div>
+                                    <div class="text-lg font-bold">Li</div>
+                                    <div class="text-xs text-gray-400">锂</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">4</div>
-                                    <div class="element-symbol">Be</div>
-                                    <div class="element-name text-xs">铍</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Be" style="grid-column: 2; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">4</div>
+                                    <div class="text-lg font-bold">Be</div>
+                                    <div class="text-xs text-gray-400">铍</div>
                                 </div>
-                                <div class="element col-span-10"></div>
-                                <div class="element">
-                                    <div class="element-number">5</div>
-                                    <div class="element-symbol">B</div>
-                                    <div class="element-name text-xs">硼</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="B" style="grid-column: 13; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">5</div>
+                                    <div class="text-lg font-bold">B</div>
+                                    <div class="text-xs text-gray-400">硼</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">6</div>
-                                    <div class="element-symbol">C</div>
-                                    <div class="element-name text-xs">碳</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="C" style="grid-column: 14; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">6</div>
+                                    <div class="text-lg font-bold">C</div>
+                                    <div class="text-xs text-gray-400">碳</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">7</div>
-                                    <div class="element-symbol">N</div>
-                                    <div class="element-name text-xs">氮</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="N" style="grid-column: 15; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">7</div>
+                                    <div class="text-lg font-bold">N</div>
+                                    <div class="text-xs text-gray-400">氮</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">8</div>
-                                    <div class="element-symbol">O</div>
-                                    <div class="element-name text-xs">氧</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="O" style="grid-column: 16; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">8</div>
+                                    <div class="text-lg font-bold">O</div>
+                                    <div class="text-xs text-gray-400">氧</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">9</div>
-                                    <div class="element-symbol">F</div>
-                                    <div class="element-name text-xs">氟</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="F" style="grid-column: 17; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">9</div>
+                                    <div class="text-lg font-bold">F</div>
+                                    <div class="text-xs text-gray-400">氟</div>
                                 </div>
-                                <div class="element">
-                                    <div class="element-number">10</div>
-                                    <div class="element-symbol">Ne</div>
-                                    <div class="element-name text-xs">氖</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Ne" style="grid-column: 18; grid-row: 3;">
+                                    <div class="text-xs text-gray-400">10</div>
+                                    <div class="text-lg font-bold">Ne</div>
+                                    <div class="text-xs text-gray-400">氖</div>
                                 </div>
-                    
-                    <!-- 其他元素省略... -->
+                                 
+                                <!-- 第三周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Na" style="grid-column: 1; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">11</div>
+                                    <div class="text-lg font-bold">Na</div>
+                                    <div class="text-xs text-gray-400">钠</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Mg" style="grid-column: 2; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">12</div>
+                                    <div class="text-lg font-bold">Mg</div>
+                                    <div class="text-xs text-gray-400">镁</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-solid" data-element="Al" style="grid-column: 13; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">13</div>
+                                    <div class="text-lg font-bold">Al</div>
+                                    <div class="text-xs text-gray-400">铝</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Si" style="grid-column: 14; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">14</div>
+                                    <div class="text-lg font-bold">Si</div>
+                                    <div class="text-xs text-gray-400">硅</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="P" style="grid-column: 15; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">15</div>
+                                    <div class="text-lg font-bold">P</div>
+                                    <div class="text-xs text-gray-400">磷</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="S" style="grid-column: 16; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">16</div>
+                                    <div class="text-lg font-bold">S</div>
+                                    <div class="text-xs text-gray-400">硫</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Cl" style="grid-column: 17; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">17</div>
+                                    <div class="text-lg font-bold">Cl</div>
+                                    <div class="text-xs text-gray-400">氯</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Ar" style="grid-column: 18; grid-row: 4;">
+                                    <div class="text-xs text-gray-400">18</div>
+                                    <div class="text-lg font-bold">Ar</div>
+                                </div>
+                                 
+                                <!-- 第四周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="K" style="grid-column: 1; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">19</div>
+                                    <div class="text-lg font-bold">K</div>
+                                    <div class="text-xs text-gray-400">钾</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ca" style="grid-column: 2; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">20</div>
+                                    <div class="text-lg font-bold">Ca</div>
+                                    <div class="text-xs text-gray-400">钙</div>
+                                </div>
+                                <!-- 第四周期过渡金属 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Sc" style="grid-column: 3; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">21</div>
+                                    <div class="text-lg font-bold">Sc</div>
+                                    <div class="text-xs text-gray-400">钪</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ti" style="grid-column: 4; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">22</div>
+                                    <div class="text-lg font-bold">Ti</div>
+                                    <div class="text-xs text-gray-400">钛</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="V" style="grid-column: 5; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">23</div>
+                                    <div class="text-lg font-bold">V</div>
+                                    <div class="text-xs text-gray-400">钒</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Cr" style="grid-column: 6; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">24</div>
+                                    <div class="text-lg font-bold">Cr</div>
+                                    <div class="text-xs text-gray-400">铬</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Mn" style="grid-column: 7; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">25</div>
+                                    <div class="text-lg font-bold">Mn</div>
+                                    <div class="text-xs text-gray-400">锰</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-solid" data-element="Fe" style="grid-column: 8; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">26</div>
+                                    <div class="text-lg font-bold">Fe</div>
+                                    <div class="text-xs text-gray-400">铁</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Co" style="grid-column: 9; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">27</div>
+                                    <div class="text-lg font-bold">Co</div>
+                                    <div class="text-xs text-gray-400">钴</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ni" style="grid-column: 10; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">28</div>
+                                    <div class="text-lg font-bold">Ni</div>
+                                    <div class="text-xs text-gray-400">镍</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-solid" data-element="Cu" style="grid-column: 11; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">29</div>
+                                    <div class="text-lg font-bold">Cu</div>
+                                    <div class="text-xs text-gray-400">铜</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Zn" style="grid-column: 12; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">30</div>
+                                    <div class="text-lg font-bold">Zn</div>
+                                    <div class="text-xs text-gray-400">锌</div>
+                                </div>
+                                <!-- 第四周期主族元素 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ga" style="grid-column: 13; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">31</div>
+                                    <div class="text-lg font-bold">Ga</div>
+                                    <div class="text-xs text-gray-400">镓</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ge" style="grid-column: 14; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">32</div>
+                                    <div class="text-lg font-bold">Ge</div>
+                                    <div class="text-xs text-gray-400">锗</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="As" style="grid-column: 15; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">33</div>
+                                    <div class="text-lg font-bold">As</div>
+                                    <div class="text-xs text-gray-400">砷</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Se" style="grid-column: 16; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">34</div>
+                                    <div class="text-lg font-bold">Se</div>
+                                    <div class="text-xs text-gray-400">硒</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Br" style="grid-column: 17; grid-row: 5;">
+                                    <div class="text-xs text-gray-400">35</div>
+                                    <div class="text-lg font-bold">Br</div>
+                                    <div class="text-xs text-gray-400">溴</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-liquid" data-element="Br" style="grid-column: 17; grid-row: 5;">
+                                      <div class="text-xs text-gray-400">35</div>
+                                      <div class="text-lg font-bold">Br</div>
+                                      <div class="text-xs text-gray-400">溴</div>
+                                  </div>
+                                  <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Kr" style="grid-column: 18; grid-row: 5;">
+                                      <div class="text-xs text-gray-400">36</div>
+                                      <div class="text-lg font-bold">Kr</div>
+                                      <div class="text-xs text-gray-400">氪</div>
+                                  </div>
+                                <!-- 第五周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Rb" style="grid-column: 1; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">37</div>
+                                    <div class="text-lg font-bold">Rb</div>
+                                    <div class="text-xs text-gray-400">铷</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Sr" style="grid-column: 2; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">38</div>
+                                    <div class="text-lg font-bold">Sr</div>
+                                    <div class="text-xs text-gray-400">锶</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Y" style="grid-column: 3; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">39</div>
+                                    <div class="text-lg font-bold">Y</div>
+                                    <div class="text-xs text-gray-400">钇</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Zr" style="grid-column: 4; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">40</div>
+                                    <div class="text-lg font-bold">Zr</div>
+                                    <div class="text-xs text-gray-400">锆</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Nb" style="grid-column: 5; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">41</div>
+                                    <div class="text-lg font-bold">Nb</div>
+                                    <div class="text-xs text-gray-400">铌</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Mo" style="grid-column: 6; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">42</div>
+                                    <div class="text-lg font-bold">Mo</div>
+                                    <div class="text-xs text-gray-400">钼</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Tc" style="grid-column: 7; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">43</div>
+                                    <div class="text-lg font-bold">Tc</div>
+                                    <div class="text-xs text-gray-400">锝</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ru" style="grid-column: 8; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">44</div>
+                                    <div class="text-lg font-bold">Ru</div>
+                                    <div class="text-xs text-gray-400">钌</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Rh" style="grid-column: 9; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">45</div>
+                                    <div class="text-lg font-bold">Rh</div>
+                                    <div class="text-xs text-gray-400">铑</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pd" style="grid-column: 10; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">46</div>
+                                    <div class="text-lg font-bold">Pd</div>
+                                    <div class="text-xs text-gray-400">钯</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-solid" data-element="Ag" style="grid-column: 11; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">47</div>
+                                    <div class="text-lg font-bold">Ag</div>
+                                    <div class="text-xs text-gray-400">银</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Cd" style="grid-column: 12; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">48</div>
+                                    <div class="text-lg font-bold">Cd</div>
+                                    <div class="text-xs text-gray-400">镉</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="In" style="grid-column: 13; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">49</div>
+                                    <div class="text-lg font-bold">In</div>
+                                    <div class="text-xs text-gray-400">铟</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Sn" style="grid-column: 14; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">50</div>
+                                    <div class="text-lg font-bold">Sn</div>
+                                    <div class="text-xs text-gray-400">锡</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Sb" style="grid-column: 15; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">51</div>
+                                    <div class="text-lg font-bold">Sb</div>
+                                    <div class="text-xs text-gray-400">锑</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Te" style="grid-column: 16; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">52</div>
+                                    <div class="text-lg font-bold">Te</div>
+                                    <div class="text-xs text-gray-400">碲</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="I" style="grid-column: 17; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">53</div>
+                                    <div class="text-lg font-bold">I</div>
+                                    <div class="text-xs text-gray-400">碘</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Xe" style="grid-column: 18; grid-row: 6;">
+                                    <div class="text-xs text-gray-400">54</div>
+                                    <div class="text-lg font-bold">Xe</div>
+                                    <div class="text-xs text-gray-400">氙</div>
+                                </div>
+                                <!-- 第六周期 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Cs" style="grid-column: 1; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">55</div>
+                                    <div class="text-lg font-bold">Cs</div>
+                                    <div class="text-xs text-gray-400">铯</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ba" style="grid-column: 2; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">56</div>
+                                    <div class="text-lg font-bold">Ba</div>
+                                    <div class="text-xs text-gray-400">钡</div>
+                                </div>
+                                <!-- 镧系元素 (单独显示在底部) -->
+                                <!-- 镧系元素标记 (实际显示在底部) -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer relative" data-element="La" style="grid-column: 3; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">57</div>
+                                    <div class="text-lg font-bold">La</div>
+                                    <div class="text-xs text-gray-400">镧</div>
+                                    <div class="absolute -bottom-1 -right-1 text-[8px] text-blue-500">↓</div>
+                                </div>
+                                <!-- 跳过58-71号镧系元素，它们将显示在周期表底部 -->
+                                <!-- 72-86号元素回到第六周期的正常位置 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Hf" style="grid-column: 4; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">72</div>
+                                    <div class="text-lg font-bold">Hf</div>
+                                    <div class="text-xs text-gray-400">铪</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ta" style="grid-column: 5; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">73</div>
+                                    <div class="text-lg font-bold">Ta</div>
+                                    <div class="text-xs text-gray-400">钽</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="W" style="grid-column: 6; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">74</div>
+                                    <div class="text-lg font-bold">W</div>
+                                    <div class="text-xs text-gray-400">钨</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Re" style="grid-column: 7; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">75</div>
+                                    <div class="text-lg font-bold">Re</div>
+                                    <div class="text-xs text-gray-400">铼</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Os" style="grid-column: 8; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">76</div>
+                                    <div class="text-lg font-bold">Os</div>
+                                    <div class="text-xs text-gray-400">锇</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ir" style="grid-column: 9; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">77</div>
+                                    <div class="text-lg font-bold">Ir</div>
+                                    <div class="text-xs text-gray-400">铱</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pt" style="grid-column: 10; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">78</div>
+                                    <div class="text-lg font-bold">Pt</div>
+                                    <div class="text-xs text-gray-400">铂</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-solid" data-element="Au" style="grid-column: 11; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">79</div>
+                                    <div class="text-lg font-bold">Au</div>
+                                    <div class="text-xs text-gray-400">金</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-liquid" data-element="Hg" style="grid-column: 12; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">80</div>
+                                    <div class="text-lg font-bold">Hg</div>
+                                    <div class="text-xs text-gray-400">汞</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Tl" style="grid-column: 13; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">81</div>
+                                    <div class="text-lg font-bold">Tl</div>
+                                    <div class="text-xs text-gray-400">铊</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pb" style="grid-column: 14; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">82</div>
+                                    <div class="text-lg font-bold">Pb</div>
+                                    <div class="text-xs text-gray-400">铅</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Bi" style="grid-column: 15; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">83</div>
+                                    <div class="text-lg font-bold">Bi</div>
+                                    <div class="text-xs text-gray-400">铋</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Po" style="grid-column: 16; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">84</div>
+                                    <div class="text-lg font-bold">Po</div>
+                                    <div class="text-xs text-gray-400">钋</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="At" style="grid-column: 17; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">85</div>
+                                    <div class="text-lg font-bold">At</div>
+                                    <div class="text-xs text-gray-400">砹</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas" data-element="Rn" style="grid-column: 18; grid-row: 7;">
+                                    <div class="text-xs text-gray-400">86</div>
+                                    <div class="text-lg font-bold">Rn</div>
+                                    <div class="text-xs text-gray-400">氡</div>
+                                </div>
+
+                                <!-- 第七周期元素 -->
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Fr" style="grid-column: 1; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">87</div>
+                                    <div class="text-lg font-bold">Fr</div>
+                                    <div class="text-xs text-gray-400">钫</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ra" style="grid-column: 2; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">88</div>
+                                    <div class="text-lg font-bold">Ra</div>
+                                    <div class="text-xs text-gray-400">镭</div>
+                                    <div class="absolute -bottom-1 -right-1 text-[8px] text-blue-500">↓</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ac" style="grid-column: 3; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">89</div>
+                                    <div class="text-lg font-bold">Ac</div>
+                                    <div class="text-xs text-gray-400">锕</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Rf" style="grid-column: 4; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">104</div>
+                                    <div class="text-lg font-bold">Rf</div>
+                                    <div class="text-xs text-gray-400">𬬻</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Db" style="grid-column: 5; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">105</div>
+                                    <div class="text-lg font-bold">Db</div>
+                                    <div class="text-xs text-gray-400">𬭊</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Sg" style="grid-column: 6; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">106</div>
+                                    <div class="text-lg font-bold">Sg</div>
+                                    <div class="text-xs text-gray-400">𬭳</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Bh" style="grid-column: 7; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">107</div>
+                                    <div class="text-lg font-bold">Bh</div>
+                                    <div class="text-xs text-gray-400">𬭛</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Hs" style="grid-column: 8; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">108</div>
+                                    <div class="text-lg font-bold">Hs</div>
+                                    <div class="text-xs text-gray-400">𬭶</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Mt" style="grid-column: 9; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">109</div>
+                                    <div class="text-lg font-bold">Mt</div>
+                                    <div class="text-xs text-gray-400">鿏</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Ds" style="grid-column: 10; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">110</div>
+                                    <div class="text-lg font-bold">Ds</div>
+                                    <div class="text-xs text-gray-400">𫟼</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Rg" style="grid-column: 11; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">111</div>
+                                    <div class="text-lg font-bold">Rg</div>
+                                    <div class="text-xs text-gray-400">𬬭</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Cn" style="grid-column: 12; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">112</div>
+                                    <div class="text-lg font-bold">Cn</div>
+                                    <div class="text-xs text-gray-400">鿔</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Nh" style="grid-column: 13; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">113</div>
+                                    <div class="text-lg font-bold">Nh</div>
+                                    <div class="text-xs text-gray-400">鉨</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Fl" style="grid-column: 14; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">114</div>
+                                    <div class="text-lg font-bold">Fl</div>
+                                    <div class="text-xs text-gray-400">𫓧</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Mc" style="grid-column: 15; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">115</div>
+                                    <div class="text-lg font-bold">Mc</div>
+                                    <div class="text-xs text-gray-400">镆</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Lv" style="grid-column: 16; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">116</div>
+                                    <div class="text-lg font-bold">Lv</div>
+                                    <div class="text-xs text-gray-400">𫟷</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Ts" style="grid-column: 17; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">117</div>
+                                    <div class="text-lg font-bold">Ts</div>
+                                    <div class="text-xs text-gray-400">鿬</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-gas state-artificial" data-element="Og" style="grid-column: 18; grid-row: 8;">
+                                    <div class="text-xs text-gray-400">118</div>
+                                    <div class="text-lg font-bold">Og</div>
+                                    <div class="text-xs text-gray-400">鿫</div>
+                                </div>
+
+                                <!-- 分隔行 -->
+                                <div class="col-span-full h-4"></div>
+
+                                <!-- 镧系元素 -->
+                                <div class="text-center col-span-full py-2 font-semibold text-blue-500">镧系元素</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="La" style="grid-column: 3; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">57</div>
+                                    <div class="text-lg font-bold">La</div>
+                                    <div class="text-xs text-gray-400">镧</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ce" style="grid-column: 4; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">58</div>
+                                    <div class="text-lg font-bold">Ce</div>
+                                    <div class="text-xs text-gray-400">铈</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pr" style="grid-column: 5; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">59</div>
+                                    <div class="text-lg font-bold">Pr</div>
+                                    <div class="text-xs text-gray-400">镨</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Nd" style="grid-column: 6; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">60</div>
+                                    <div class="text-lg font-bold">Nd</div>
+                                    <div class="text-xs text-gray-400">钕</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer state-artificial" data-element="Pm" style="grid-column: 7; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">61</div>
+                                    <div class="text-lg font-bold">Pm</div>
+                                    <div class="text-xs text-gray-400">钷</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Sm" style="grid-column: 8; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">62</div>
+                                    <div class="text-lg font-bold">Sm</div>
+                                    <div class="text-xs text-gray-400">钐</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Eu" style="grid-column: 9; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">63</div>
+                                    <div class="text-lg font-bold">Eu</div>
+                                    <div class="text-xs text-gray-400">铕</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Gd" style="grid-column: 10; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">64</div>
+                                    <div class="text-lg font-bold">Gd</div>
+                                    <div class="text-xs text-gray-400">钆</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Tb" style="grid-column: 11; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">65</div>
+                                    <div class="text-lg font-bold">Tb</div>
+                                    <div class="text-xs text-gray-400">铽</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Dy" style="grid-column: 12; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">66</div>
+                                    <div class="text-lg font-bold">Dy</div>
+                                    <div class="text-xs text-gray-400">镝</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ho" style="grid-column: 13; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">67</div>
+                                    <div class="text-lg font-bold">Ho</div>
+                                    <div class="text-xs text-gray-400">钬</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Er" style="grid-column: 14; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">68</div>
+                                    <div class="text-lg font-bold">Er</div>
+                                    <div class="text-xs text-gray-400">铒</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Tm" style="grid-column: 15; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">69</div>
+                                    <div class="text-lg font-bold">Tm</div>
+                                    <div class="text-xs text-gray-400">铥</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Yb" style="grid-column: 16; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">70</div>
+                                    <div class="text-lg font-bold">Yb</div>
+                                    <div class="text-xs text-gray-400">镱</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Lu" style="grid-column: 17; grid-row: 10;">
+                                    <div class="text-xs text-gray-400">71</div>
+                                    <div class="text-lg font-bold">Lu</div>
+                                    <div class="text-xs text-gray-400">镥</div>
+                                </div>
+
+                                <!-- 锕系元素 -->
+                                <div class="text-center col-span-full py-2 font-semibold text-blue-500">锕系元素</div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Ac" style="grid-column: 3; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">89</div>
+                                    <div class="text-lg font-bold">Ac</div>
+                                    <div class="text-xs text-gray-400">锕</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Th" style="grid-column: 4; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">90</div>
+                                    <div class="text-lg font-bold">Th</div>
+                                    <div class="text-xs text-gray-400">钍</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pa" style="grid-column: 5; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">91</div>
+                                    <div class="text-lg font-bold">Pa</div>
+                                    <div class="text-xs text-gray-400">镤</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="U" style="grid-column: 6; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">92</div>
+                                    <div class="text-lg font-bold">U</div>
+                                    <div class="text-xs text-gray-400">铀</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Np" style="grid-column: 7; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">93</div>
+                                    <div class="text-lg font-bold">Np</div>
+                                    <div class="text-xs text-gray-400">镎</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Pu" style="grid-column: 8; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">94</div>
+                                    <div class="text-lg font-bold">Pu</div>
+                                    <div class="text-xs text-gray-400">钚</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Am" style="grid-column: 9; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">95</div>
+                                    <div class="text-lg font-bold">Am</div>
+                                    <div class="text-xs text-gray-400">镅</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Cm" style="grid-column: 10; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">96</div>
+                                    <div class="text-lg font-bold">Cm</div>
+                                    <div class="text-xs text-gray-400">锔</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Bk" style="grid-column: 11; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">97</div>
+                                    <div class="text-lg font-bold">Bk</div>
+                                    <div class="text-xs text-gray-400">锫</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Cf" style="grid-column: 12; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">98</div>
+                                    <div class="text-lg font-bold">Cf</div>
+                                    <div class="text-xs text-gray-400">锎</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Es" style="grid-column: 13; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">99</div>
+                                    <div class="text-lg font-bold">Es</div>
+                                    <div class="text-xs text-gray-400">锿</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Fm" style="grid-column: 14; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">100</div>
+                                    <div class="text-lg font-bold">Fm</div>
+                                    <div class="text-xs text-gray-400">镄</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Md" style="grid-column: 15; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">101</div>
+                                    <div class="text-lg font-bold">Md</div>
+                                    <div class="text-xs text-gray-400">钔</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="No" style="grid-column: 16; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">102</div>
+                                    <div class="text-lg font-bold">No</div>
+                                    <div class="text-xs text-gray-400">锘</div>
+                                </div>
+                                <div class="periodic-element glassmorphism p-2 text-center cursor-pointer" data-element="Lr" style="grid-column: 17; grid-row: 11;">
+                                    <div class="text-xs text-gray-400">103</div>
+                                    <div class="text-lg font-bold">Lr</div>
+                                    <div class="text-xs text-gray-400">铹</div>
+                                </div>
                             </div>
                         </div>
                         
@@ -1074,41 +1759,131 @@
         <section id="about" class="animated-section section-hidden">
             <div class="container mx-auto px-4 md:px-8 py-8">
                 <div class="section-content">
-                    <h2 class="text-3xl font-bold quantum-blue mb-6 pb-4 border-b border-gray-700">
-                        <i class="fas fa-info-circle mr-2"></i>关于我们
+                    <h2 class="text-3xl font-bold mb-6 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-purple-600 flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        关于我
                     </h2>
                     
                     <div class="glassmorphism p-8 max-w-4xl mx-auto">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <h3 class="text-xl font-bold mb-4">平台使命</h3>
-                                <p class="text-gray-400 mb-4">
-                                    JMM平台致力于推动材料科学研究的数据共享与AI辅助，构建开放的科学社区，加速材料科学领域的创新与发现。
-                                </p>
-                                <p class="text-gray-400">
-                                    我们整合了10万+开源文献数据，通过先进的AI技术提供智能搜索、问答助手和数据分析工具，帮助研究人员更高效地开展科研工作。
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h3 class="text-xl font-bold mb-4">团队介绍</h3>
-                                <div class="flex items-center mb-4">
-                                    <div class="w-16 h-16 glassmorphism rounded-full mr-4 flex items-center justify-center">
-                                        <i class="fas fa-user text-xl"></i>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                            <div class="md:col-span-1">
+                                <div class="glassmorphism p-6 rounded-lg text-center profile-card">
+                                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-gradient-to-r from-teal-500 to-purple-600 mb-4">
+                                        <img src="0.25M图片1.jpg" alt="王佳林" class="w-full h-full object-cover">
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold">张博士</h4>
-                                        <p class="text-sm text-gray-400">材料科学专家</p>
+                                    <h3 class="text-xl font-semibold mb-2">王佳林</h3>
+                                    <p class="text-gray-400 mb-2">西安交通大学材料科学与工程</p>
+                                    <p class="text-gray-400 mb-4">研究方向: 膜材料设计、分离技术、计算材料学</p>
+                                     
+                                    <div class="flex justify-center gap-4">
+                                        <a href="mailto:example@mail.com" class="w-10 h-10 rounded-full bg-teal-500 bg-opacity-20 flex items-center justify-center text-teal-500 hover:bg-opacity-30 transition-colors">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                        <a href="tel:+861234567890" class="w-10 h-10 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center text-purple-500 hover:bg-opacity-30 transition-colors">
+                                            <i class="fas fa-phone"></i>
+                                        </a>
+                                        <a href="https://github.com/example" class="w-10 h-10 rounded-full bg-teal-500 bg-opacity-20 flex items-center justify-center text-teal-500 hover:bg-opacity-30 transition-colors">
+                                            <i class="fab fa-github"></i>
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-16 h-16 glassmorphism rounded-full mr-4 flex items-center justify-center">
-                                        <i class="fas fa-user text-xl"></i>
+                            </div>
+                             
+                            <div class="md:col-span-2">
+                                <div class="glassmorphism p-6 rounded-lg mb-8">
+                                    <h3 class="text-xl font-semibold mb-4">个人简介</h3>
+                                    <p class="text-gray-400 mb-4">
+                                        西安交通大学材料科学与工程学院硕博连读研究生，专注于膜材料设计、分离技术和计算材料学研究。具有多学科交叉背景，在膜分离、材料设计和AI辅助研究方面有丰富经验。
+                                    </p>
+                                    <p class="text-gray-400">
+                                        主导开发了多目标优化膜材料设计平台和基于LLM的材料知识提取系统，发表多篇高水平学术论文，并拥有多项发明专利。
+                                    </p>
+                                </div>
+                                 
+                                <div class="glassmorphism p-6 rounded-lg mb-8">
+                                    <h3 class="text-xl font-semibold mb-4">学术成果</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="glassmorphism p-4 rounded-lg text-center card-hover">
+                                            <div class="text-3xl font-bold text-teal-500 mb-2">2</div>
+                                            <p class="text-sm text-gray-400">学生一作论文</p>
+                                        </div>
+                                         
+                                        <div class="glassmorphism p-4 rounded-lg text-center card-hover">
+                                            <div class="text-3xl font-bold text-purple-500 mb-2">1+</div>
+                                            <p class="text-sm text-gray-400">发明专利</p>
+                                        </div>
+                                         
+                                        <div class="glassmorphism p-4 rounded-lg text-center card-hover">
+                                            <div class="text-3xl font-bold text-teal-500 mb-2">3</div>
+                                            <p class="text-sm text-gray-400">主要项目</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold">李博士</h4>
-                                        <p class="text-sm text-gray-400">人工智能专家</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glassmorphism p-6 rounded-lg mb-8">
+                            <h3 class="text-xl font-semibold mb-4"><i class="fas fa-graduation-cap mr-2"></i>教育经历</h3>
+                            <div class="relative">
+                                <div class="timeline-line absolute left-6 top-0 bottom-0 bg-gradient-to-b from-teal-500 to-purple-600"></div>
+                                 
+                                <div class="relative pl-12 pb-8">
+                                    <div class="timeline-dot absolute left-0 top-1 bg-gradient-to-r from-teal-500 to-purple-600"></div>
+                                    <div class="glassmorphism p-4 rounded-lg">
+                                        <h4 class="font-semibold">硕博连读</h4>
+                                        <p class="text-sm text-gray-400">西安交通大学 | 2020.09 - 至今</p>
+                                        <p class="mt-2 text-gray-400">研究方向: 膜材料设计、分离技术、计算材料学</p>
                                     </div>
+                                </div>
+                                 
+                                <div class="relative pl-12">
+                                    <div class="timeline-dot absolute left-0 top-1 bg-gradient-to-r from-teal-500 to-purple-600"></div>
+                                    <div class="glassmorphism p-4 rounded-lg">
+                                        <h4 class="font-semibold">硕士学位</h4>
+                                        <p class="text-sm text-gray-400">西安交通大学 | 2018.09 - 2020.06</p>
+                                        <p class="mt-2 text-gray-400">研究方向: 先进功能材料、电池材料</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         
+                        <div class="glassmorphism p-6 rounded-lg mb-8">
+                            <h3 class="text-xl font-semibold mb-4"><i class="fas fa-flask mr-2"></i>科研成果</h3>
+                            <div class="space-y-3">
+                                <div class="glassmorphism p-3 rounded-lg card-hover">
+                                    <p class="font-bold text-sm">学生一作论文</p>
+                                    <p class="text-xs text-gray-400">膜分离技术为Kr/Xe分离提供了高效解决方案</p>
+                                    <p class="text-xs text-gray-500 mt-1">发表于 SPT 期刊, 2025</p>
+                                </div>
+                                <div class="glassmorphism p-3 rounded-lg card-hover">
+                                    <p class="font-bold text-sm">学生一作论文</p>
+                                    <p class="text-xs text-gray-400">N-杂环诱导π-π相互作用策略合成高孔隙率HCPs</p>
+                                    <p class="text-xs text-gray-500 mt-1">发表于 SPT 期刊, 2024</p>
+                                </div>
+                                <div class="glassmorphism p-3 rounded-lg card-hover">
+                                    <p class="font-bold text-sm">发明专利</p>
+                                    <p class="text-xs text-gray-400">用于氙气氮气分离的共价有机框架材料及其制备方法和应用</p>
+                                    <p class="text-xs text-gray-500 mt-1">专利号: 202410012499.1 (已公布)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glassmorphism p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4"><i class="fas fa-project-diagram mr-2"></i>项目经历</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="glassmorphism p-4 rounded-lg card-hover">
+                                    <h4 class="font-semibold mb-2 text-center">多目标优化膜材料设计</h4>
+                                    <p class="text-xs text-gray-400 text-center">基于机器学习的膜材料性能预测与优化平台</p>
+                                </div>
+                                <div class="glassmorphism p-4 rounded-lg card-hover">
+                                    <h4 class="font-semibold mb-2 text-center">LLM材料知识提取</h4>
+                                    <p class="text-xs text-gray-400 text-center">从文献中自动提取材料结构与性能关系</p>
+                                </div>
+                                <div class="glassmorphism p-4 rounded-lg card-hover">
+                                    <h4 class="font-semibold mb-2 text-center">材料科学文献数据库</h4>
+                                    <p class="text-xs text-gray-400 text-center">整合10万+开源文献的智能检索系统</p>
                                 </div>
                             </div>
                         </div>
@@ -1120,7 +1895,7 @@
         <!-- 页脚 -->
         <footer class="footer-container">
             <div class="copyright">
-                © 2025 JMM Journey of Materials Mining | <a href="13759918657@163.com">13759918657@163.com</a> |西安交通大学材料科学研究院
+                © 2024 JMM Materials Intelligence Platform | <a href="mailto:contact@jmm-materials.org">13759918657@163.com</a> | 西安交通大学材料研究院
             </div>
         </footer>
     </main>
@@ -1321,6 +2096,33 @@
                         assistantBubble.className = 'assistant-bubble p-4 rounded-lg mb-4';
                         
                         // 根据问题类型提供不同的回答
+                        if (message.toLowerCase().includes('钙钛矿')) {
+                            assistantBubble.innerHTML = `
+                                <p>钙钛矿材料是一类具有ABX₃结构的晶体材料，在太阳能电池领域有重要应用。</p>
+                                <p class="mt-2">最近的研究集中在提高钙钛矿太阳能电池的稳定性和效率，2023年最高认证效率已达到26.1%。</p>
+                                <p class="mt-2">您需要更具体的哪方面信息？制备方法、稳定性改进还是效率提升策略？</p>
+                            `;
+                            createKnowledgeGraph('钙钛矿');
+                        } else if (message.toLowerCase().includes('石墨烯')) {
+                            assistantBubble.innerHTML = `
+                                <p>石墨烯是一种由碳原子以sp²杂化轨道组成六角型呈蜂巢晶格的二维材料。</p>
+                                <p class="mt-2">它具有优异的导电性、导热性和机械强度，在电子器件、复合材料和储能领域有广泛应用。</p>
+                                <p class="mt-2">我们数据库中有1287篇关于石墨烯的文献，您需要查看哪方面的具体研究？</p>
+                            `;
+                            createKnowledgeGraph('石墨烯');
+                        } else {
+                            assistantBubble.innerHTML = `
+                                <p>感谢您的提问！关于"${message}"，我在数据库中找到以下相关文献：</p>
+                                <ul class="mt-2 list-disc pl-5">
+                                    <li>新型材料合成方法研究 (2023)</li>
+                                    <li>先进表征技术在材料科学中的应用 (2022)</li>
+                                    <li>计算材料学的最新进展 (2024)</li>
+                                </ul>
+                                <p class="mt-2">您需要我详细介绍其中某一篇文献，还是有其他具体问题？</p>
+                            `;
+                            createKnowledgeGraph(message);
+                        }
+                        
                         chatContainer.appendChild(assistantBubble);
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                     }, 1500);
@@ -1361,6 +2163,209 @@
                     }
                 });
             });
+        // 周期表元素交互
+        // 已更新为使用 data-element 属性选择器
+        // const periodicElements = document.querySelectorAll('.periodic-element');
+        const elementDetail = document.createElement('div');
+        const overlay = document.createElement('div');
+        const closeBtn = document.createElement('button');
+
+        // 设置元素详情面板
+        elementDetail.className = 'element-detail';
+        closeBtn.className = 'close-btn';
+        closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        elementDetail.appendChild(closeBtn);
+        document.body.appendChild(elementDetail);
+
+        // 设置背景遮罩
+        overlay.className = 'overlay';
+        document.body.appendChild(overlay);
+
+        // 元素数据
+        const elementData = {
+            'H': { name: '氢', atomicWeight: '1.008', electronConfig: '1s¹', discoverer: '亨利·卡文迪许', year: '1766', uses: '工业制氨、火箭燃料、气象气球' },
+            'He': { name: '氦', atomicWeight: '4.003', electronConfig: '1s²', discoverer: '皮埃尔·让森', year: '1868', uses: '气球、低温物理学、医疗成像' },
+            'Li': { name: '锂', atomicWeight: '6.941', electronConfig: '[He] 2s¹', discoverer: '约翰·奥古斯特·阿韦德松', year: '1817', uses: '锂电池、铝合金、玻璃陶瓷' },
+            'Be': { name: '铍', atomicWeight: '9.012', electronConfig: '[He] 2s²', discoverer: '路易-尼古拉·沃克兰', year: '1798', uses: '航空航天材料、X射线管、核反应堆' },
+            'B': { name: '硼', atomicWeight: '10.81', electronConfig: '[He] 2s² 2p¹', discoverer: '约瑟夫·路易·盖-吕萨克', year: '1808', uses: '玻璃制造、清洁剂、半导体' },
+            'C': { name: '碳', atomicWeight: '12.01', electronConfig: '[He] 2s² 2p²', discoverer: '已知', year: '远古', uses: '钢铁生产、电极、钻石、石墨烯' },
+            'N': { name: '氮', atomicWeight: '14.01', electronConfig: '[He] 2s² 2p³', discoverer: '丹尼尔·卢瑟福', year: '1772', uses: '化肥生产、冷冻剂、电子工业' },
+            'O': { name: '氧', atomicWeight: '16.00', electronConfig: '[He] 2s² 2p⁴', discoverer: '约瑟夫·普里斯特利', year: '1774', uses: '呼吸、钢铁生产、医疗' },
+            'F': { name: '氟', atomicWeight: '19.00', electronConfig: '[He] 2s² 2p⁵', discoverer: '亨利·莫瓦桑', year: '1886', uses: '制冷剂、塑料、牙膏' },
+            'Ne': { name: '氖', atomicWeight: '20.18', electronConfig: '[He] 2s² 2p⁶', discoverer: '威廉·拉姆齐', year: '1898', uses: '霓虹灯、激光、真空技术' },
+            'Na': { name: '钠', atomicWeight: '22.99', electronConfig: '[Ne] 3s¹', discoverer: '汉弗里·戴维', year: '1807', uses: '食盐、肥皂、钠光灯' },
+            'Mg': { name: '镁', atomicWeight: '24.31', electronConfig: '[Ne] 3s²', discoverer: '汉弗里·戴维', year: '1808', uses: '铝合金、烟火、医药' },
+            'Al': { name: '铝', atomicWeight: '26.98', electronConfig: '[Ne] 3s² 3p¹', discoverer: '汉斯·奥斯特', year: '1825', uses: '航空航天、包装材料、建筑' },
+            'Si': { name: '硅', atomicWeight: '28.09', electronConfig: '[Ne] 3s² 3p²', discoverer: '永斯·雅各布·贝采利乌斯', year: '1823', uses: '半导体、太阳能电池、玻璃' },
+            'P': { name: '磷', atomicWeight: '30.97', electronConfig: '[Ne] 3s² 3p³', discoverer: '亨尼格·布兰德', year: '1669', uses: '化肥、火柴、洗涤剂' },
+            'S': { name: '硫', atomicWeight: '32.07', electronConfig: '[Ne] 3s² 3p⁴', discoverer: '已知', year: '远古', uses: '硫酸、橡胶硫化、杀虫剂' },
+            'Cl': { name: '氯', atomicWeight: '35.45', electronConfig: '[Ne] 3s² 3p⁵', discoverer: '卡尔·威廉·舍勒', year: '1774', uses: '消毒、漂白剂、塑料' },
+            'Ar': { name: '氩', atomicWeight: '39.95', electronConfig: '[Ne] 3s² 3p⁶', discoverer: '威廉·拉姆齐', year: '1894', uses: '焊接保护气、照明、医疗' },
+            // 第四周期元素 (K-Kr)
+            'K': { name: '钾', atomicWeight: '39.10', electronConfig: '[Ar] 4s¹', discoverer: '汉弗里·戴维', year: '1807', uses: '化肥、玻璃制造、医药' },
+            'Ca': { name: '钙', atomicWeight: '40.08', electronConfig: '[Ar] 4s²', discoverer: '汉弗里·戴维', year: '1808', uses: '建筑材料、补钙剂、冶金' },
+            'Sc': { name: '钪', atomicWeight: '44.96', electronConfig: '[Ar] 3d¹ 4s²', discoverer: '拉斯·弗雷德里克·尼尔森', year: '1879', uses: '铝合金、激光材料、陶瓷' },
+            'Ti': { name: '钛', atomicWeight: '47.87', electronConfig: '[Ar] 3d² 4s²', discoverer: '威廉·格雷戈尔', year: '1791', uses: '航空航天、医疗器械、体育用品' },
+            'V': { name: '钒', atomicWeight: '50.94', electronConfig: '[Ar] 3d³ 4s²', discoverer: '安德斯·古斯塔夫·埃克贝里', year: '1801', uses: '合金钢、催化剂、电池' },
+            'Cr': { name: '铬', atomicWeight: '52.00', electronConfig: '[Ar] 3d⁵ 4s¹', discoverer: '路易-尼古拉·沃克兰', year: '1797', uses: '不锈钢、镀铬、颜料' },
+            'Mn': { name: '锰', atomicWeight: '54.94', electronConfig: '[Ar] 3d⁵ 4s²', discoverer: '约翰·戈特利布·甘恩', year: '1774', uses: '钢铁生产、电池、催化剂' },
+            'Fe': { name: '铁', atomicWeight: '55.85', electronConfig: '[Ar] 3d⁶ 4s²', discoverer: '已知', year: '远古', uses: '钢铁制造、建筑、运输' },
+            'Co': { name: '钴', atomicWeight: '58.93', electronConfig: '[Ar] 3d⁷ 4s²', discoverer: '乔治·勃兰特', year: '1735', uses: '合金、电池、磁体' },
+            'Ni': { name: '镍', atomicWeight: '58.69', electronConfig: '[Ar] 3d⁸ 4s²', discoverer: '亚历山德罗·伏特', year: '1751', uses: '不锈钢、电池、催化剂' },
+            'Cu': { name: '铜', atomicWeight: '63.55', electronConfig: '[Ar] 3d¹⁰ 4s¹', discoverer: '已知', year: '远古', uses: '电线、管道、硬币、电子设备' },
+            'Zn': { name: '锌', atomicWeight: '65.38', electronConfig: '[Ar] 3d¹⁰ 4s²', discoverer: '安德斯·西吉斯蒙德·马赛格拉夫', year: '1746', uses: '镀锌、电池、合金' },
+            'Ga': { name: '镓', atomicWeight: '69.72', electronConfig: '[Ar] 3d¹⁰ 4s² 4p¹', discoverer: '保罗·埃米尔·勒科克·德布瓦博德兰', year: '1875', uses: '半导体、LED、太阳能电池' },
+            'Ge': { name: '锗', atomicWeight: '72.64', electronConfig: '[Ar] 3d¹⁰ 4s² 4p²', discoverer: '克莱门斯·温克勒', year: '1886', uses: '半导体、光纤、红外光学' },
+            'As': { name: '砷', atomicWeight: '74.92', electronConfig: '[Ar] 3d¹⁰ 4s² 4p³', discoverer: '已知', year: '远古', uses: '农药、木材防腐剂、半导体' },
+            'Se': { name: '硒', atomicWeight: '78.96', electronConfig: '[Ar] 3d¹⁰ 4s² 4p⁴', discoverer: '永斯·雅各布·贝采利乌斯', year: '1817', uses: '玻璃制造、半导体、营养补充剂' },
+            'Br': { name: '溴', atomicWeight: '79.90', electronConfig: '[Ar] 3d¹⁰ 4s² 4p⁵', discoverer: '安托万-约瑟夫·巴拉尔', year: '1826', uses: '阻燃剂、农药、医药' },
+            'Kr': { name: '氪', atomicWeight: '83.80', electronConfig: '[Ar] 3d¹⁰ 4s² 4p⁶', discoverer: '威廉·拉姆齐', year: '1898', uses: '照明、激光、医疗' },
+            // 第五周期元素 (Rb-Xe)
+            'Rb': { name: '铷', atomicWeight: '85.47', electronConfig: '[Kr] 5s¹', discoverer: '罗伯特·威廉·本生', year: '1861', uses: '电子设备、催化剂、玻璃' },
+            'Sr': { name: '锶', atomicWeight: '87.62', electronConfig: '[Kr] 5s²', discoverer: '汉弗里·戴维', year: '1808', uses: '烟火、荧光材料、医疗' },
+            'Y': { name: '钇', atomicWeight: '88.91', electronConfig: '[Kr] 4d¹ 5s²', discoverer: '约翰·加多林', year: '1794', uses: '合金、陶瓷、电子设备' },
+            'Zr': { name: '锆', atomicWeight: '91.22', electronConfig: '[Kr] 4d² 5s²', discoverer: '马丁·海因里希·克拉普罗特', year: '1789', uses: '核反应堆、航空航天、医疗器械' },
+            'Nb': { name: '铌', atomicWeight: '92.91', electronConfig: '[Kr] 4d⁴ 5s¹', discoverer: '查理斯·哈契特', year: '1801', uses: '合金、超导材料、电子元件' },
+            'Mo': { name: '钼', atomicWeight: '95.96', electronConfig: '[Kr] 4d⁵ 5s¹', discoverer: '卡尔·威廉·舍勒', year: '1778', uses: '合金钢、催化剂、电子元件' },
+            'Tc': { name: '锝', atomicWeight: '98.00', electronConfig: '[Kr] 4d⁵ 5s²', discoverer: '卡洛·佩里埃', year: '1937', uses: '医疗成像、核 medicine' },
+            'Ru': { name: '钌', atomicWeight: '101.07', electronConfig: '[Kr] 4d⁷ 5s¹', discoverer: '卡尔·恩斯特·克劳斯', year: '1844', uses: '催化剂、珠宝、电子元件' },
+            'Rh': { name: '铑', atomicWeight: '102.91', electronConfig: '[Kr] 4d⁸ 5s¹', discoverer: '威廉·海德·沃拉斯顿', year: '1803', uses: '催化剂、珠宝、电子元件' },
+            'Pd': { name: '钯', atomicWeight: '106.42', electronConfig: '[Kr] 4d¹⁰', discoverer: '威廉·海德·沃拉斯顿', year: '1803', uses: '催化剂、珠宝、电子元件' },
+            'Ag': { name: '银', atomicWeight: '107.87', electronConfig: '[Kr] 4d¹⁰ 5s¹', discoverer: '已知', year: '远古', uses: '珠宝、硬币、电子设备、摄影' },
+            'Cd': { name: '镉', atomicWeight: '112.41', electronConfig: '[Kr] 4d¹⁰ 5s²', discoverer: '卡尔·威廉·舍勒', year: '1817', uses: '电池、涂料、电子元件' },
+            'In': { name: '铟', atomicWeight: '114.82', electronConfig: '[Kr] 4d¹⁰ 5s² 5p¹', discoverer: '费迪南德·赖希', year: '1863', uses: '半导体、焊料、电子元件' },
+            'Sn': { name: '锡', atomicWeight: '118.71', electronConfig: '[Kr] 4d¹⁰ 5s² 5p²', discoverer: '已知', year: '远古', uses: '焊料、镀层、合金、电子元件' },
+            'Sb': { name: '锑', atomicWeight: '121.76', electronConfig: '[Kr] 4d¹⁰ 5s² 5p³', discoverer: '已知', year: '远古', uses: '合金、阻燃剂、半导体' },
+            'Te': { name: '碲', atomicWeight: '127.60', electronConfig: '[Kr] 4d¹⁰ 5s² 5p⁴', discoverer: '弗朗茨-约瑟夫·米勒·冯·赖兴施泰因', year: '1782', uses: '半导体、合金、太阳能电池' },
+            'I': { name: '碘', atomicWeight: '126.90', electronConfig: '[Kr] 4d¹⁰ 5s² 5p⁵', discoverer: '贝尔纳·库尔图瓦', year: '1811', uses: '消毒剂、医药、染料' },
+            'Xe': { name: '氙', atomicWeight: '131.29', electronConfig: '[Kr] 4d¹⁰ 5s² 5p⁶', discoverer: '威廉·拉姆齐', year: '1898', uses: '照明、激光、医疗' },
+            // 第六周期元素 (Cs-Rn)
+            'Cs': { name: '铯', atomicWeight: '132.91', electronConfig: '[Xe] 6s¹', discoverer: '罗伯特·威廉·本生', year: '1860', uses: '原子钟、光电管、催化剂' },
+            'Ba': { name: '钡', atomicWeight: '137.33', electronConfig: '[Xe] 6s²', discoverer: '汉弗里·戴维', year: '1808', uses: '烟火、玻璃制造、医疗' },
+            // 镧系元素
+            'La': { name: '镧', atomicWeight: '138.91', electronConfig: '[Xe] 5d¹ 6s²', discoverer: '卡尔·古斯塔夫·莫桑德', year: '1839', uses: '催化剂、合金、玻璃' },
+            'Ce': { name: '铈', atomicWeight: '140.12', electronConfig: '[Xe] 4f¹ 5d¹ 6s²', discoverer: '马丁·海因里希·克拉普罗特', year: '1803', uses: '催化剂、玻璃抛光、合金' },
+            'Pr': { name: '镨', atomicWeight: '140.91', electronConfig: '[Xe] 4f³ 6s²', discoverer: '卡尔·古斯塔夫·莫桑德', year: '1841', uses: '玻璃着色、陶瓷、磁体' },
+            'Nd': { name: '钕', atomicWeight: '144.24', electronConfig: '[Xe] 4f⁴ 6s²', discoverer: '卡尔·古斯塔夫·莫桑德', year: '1841', uses: '永磁体、激光、玻璃着色' },
+            'Pm': { name: '钷', atomicWeight: '(145)', electronConfig: '[Xe] 4f⁵ 6s²', discoverer: '雅各布·A·马林斯基', year: '1945', uses: '核电池、荧光材料、医疗' },
+            'Sm': { name: '钐', atomicWeight: '150.36', electronConfig: '[Xe] 4f⁶ 6s²', discoverer: '保罗·埃米尔·勒科克·德布瓦博德兰', year: '1879', uses: '永磁体、催化剂、核反应堆' },
+            'Eu': { name: '铕', atomicWeight: '151.96', electronConfig: '[Xe] 4f⁷ 6s²', discoverer: '尤金·德马尔赛', year: '1896', uses: '荧光材料、激光、核反应堆' },
+            'Gd': { name: '钆', atomicWeight: '157.25', electronConfig: '[Xe] 4f⁷ 5d¹ 6s²', discoverer: '让-夏尔·加利萨·德马里尼亚', year: '1880', uses: '磁体、核反应堆、医疗' },
+            'Tb': { name: '铽', atomicWeight: '158.93', electronConfig: '[Xe] 4f⁹ 6s²', discoverer: '卡尔·古斯塔夫·莫桑德', year: '1843', uses: '荧光材料、磁体、激光' },
+            'Dy': { name: '镝', atomicWeight: '162.50', electronConfig: '[Xe] 4f¹⁰ 6s²', discoverer: '保罗·埃米尔·勒科克·德布瓦博德兰', year: '1886', uses: '磁体、激光、核反应堆' },
+            'Ho': { name: '钬', atomicWeight: '164.93', electronConfig: '[Xe] 4f¹¹ 6s²', discoverer: '乔治·德海韦西', year: '1913', uses: '激光、磁体、医疗' },
+            'Er': { name: '铒', atomicWeight: '167.26', electronConfig: '[Xe] 4f¹² 6s²', discoverer: '卡尔·古斯塔夫·莫桑德', year: '1843', uses: '激光、玻璃着色、光纤' },
+            'Tm': { name: '铥', atomicWeight: '168.93', electronConfig: '[Xe] 4f¹³ 6s²', discoverer: '佩尔·特奥多尔·克里夫', year: '1879', uses: '激光、医疗、电子元件' },
+            'Yb': { name: '镱', atomicWeight: '173.05', electronConfig: '[Xe] 4f¹⁴ 6s²', discoverer: '让-夏尔·加利萨·德马里尼亚', year: '1878', uses: '激光、合金、医疗' },
+            'Lu': { name: '镥', atomicWeight: '174.97', electronConfig: '[Xe] 4f¹⁴ 5d¹ 6s²', discoverer: '乔治·于尔班', year: '1907', uses: '催化剂、医疗、电子元件' },
+            // 第六周期过渡金属和主族元素
+            'Hf': { name: '铪', atomicWeight: '178.49', electronConfig: '[Xe] 4f¹⁴ 5d² 6s²', discoverer: '乔治·德海韦西', year: '1923', uses: '核反应堆、航空航天、电子元件' },
+            'Ta': { name: '钽', atomicWeight: '180.95', electronConfig: '[Xe] 4f¹⁴ 5d³ 6s²', discoverer: '安德斯·古斯塔夫·埃克贝里', year: '1802', uses: '电子元件、医疗器械、航空航天' },
+            'W': { name: '钨', atomicWeight: '183.84', electronConfig: '[Xe] 4f¹⁴ 5d⁴ 6s²', discoverer: '卡尔·威廉·舍勒', year: '1781', uses: '白炽灯灯丝、硬质合金、高温材料' },
+            'Re': { name: '铼', atomicWeight: '186.21', electronConfig: '[Xe] 4f¹⁴ 5d⁵ 6s²', discoverer: '瓦尔特·诺达克', year: '1925', uses: '催化剂、高温合金、电子元件' },
+            'Os': { name: '锇', atomicWeight: '190.23', electronConfig: '[Xe] 4f¹⁴ 5d⁶ 6s²', discoverer: '史密森·坦南特', year: '1803', uses: '合金、催化剂、钢笔尖' },
+            'Ir': { name: '铱', atomicWeight: '192.22', electronConfig: '[Xe] 4f¹⁴ 5d⁷ 6s²', discoverer: '史密森·坦南特', year: '1803', uses: '合金、催化剂、火花塞' },
+            'Pt': { name: '铂', atomicWeight: '195.08', electronConfig: '[Xe] 4f¹⁴ 5d⁹ 6s¹', discoverer: '已知', year: '1735', uses: '催化剂、珠宝、医疗、电子元件' },
+            'Au': { name: '金', atomicWeight: '196.97', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s¹', discoverer: '已知', year: '远古', uses: '珠宝、硬币、电子元件、投资' },
+            'Hg': { name: '汞', atomicWeight: '200.59', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s²', discoverer: '已知', year: '远古', uses: '温度计、压力计、电池' },
+            'Tl': { name: '铊', atomicWeight: '204.38', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹', discoverer: '威廉·克鲁克斯', year: '1861', uses: '电子元件、光学玻璃、医药' },
+            'Pb': { name: '铅', atomicWeight: '207.2', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²', discoverer: '已知', year: '远古', uses: '电池、建筑材料、防辐射' },
+            'Bi': { name: '铋', atomicWeight: '208.98', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³', discoverer: '已知', year: '远古', uses: '医药、合金、化妆品' },
+            'Po': { name: '钋', atomicWeight: '(209)', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴', discoverer: '玛丽·居里', year: '1898', uses: '核电池、抗静电' },
+            'At': { name: '砹', atomicWeight: '(210)', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵', discoverer: '戴尔·科森', year: '1940', uses: '医疗研究' },
+            'Rn': { name: '氡', atomicWeight: '(222)', electronConfig: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶', discoverer: '弗里德里希·恩斯特·多恩', year: '1900', uses: '医疗、地质勘探' },
+            // 第七周期元素 (Fr-Og)
+            'Fr': { name: '钫', atomicWeight: '(223)', electronConfig: '[Rn] 7s¹', discoverer: '玛格丽特·佩里', year: '1939', uses: '科研' },
+            'Ra': { name: '镭', atomicWeight: '(226)', electronConfig: '[Rn] 7s²', discoverer: '玛丽·居里', year: '1898', uses: '医疗、科研' },
+            'Ac': { name: '锕', atomicWeight: '(227)', electronConfig: '[Rn] 6d¹ 7s²', discoverer: '安德烈-路易·德比埃尔内', year: '1899', uses: '科研' },
+            // 锕系元素
+            'Th': { name: '钍', atomicWeight: '232.04', electronConfig: '[Rn] 6d² 7s²', discoverer: '约恩斯·雅各布·贝采利乌斯', year: '1828', uses: '核反应堆、白炽灯灯丝' },
+            'Pa': { name: '镤', atomicWeight: '231.04', electronConfig: '[Rn] 5f² 6d¹ 7s²', discoverer: '卡西米尔·法扬斯', year: '1913', uses: '核科研' },
+            'U': { name: '铀', atomicWeight: '238.03', electronConfig: '[Rn] 5f³ 6d¹ 7s²', discoverer: '马丁·海因里希·克拉普罗特', year: '1789', uses: '核反应堆、核武器' },
+            'Np': { name: '镎', atomicWeight: '(237)', electronConfig: '[Rn] 5f⁴ 6d¹ 7s²', discoverer: '埃德温·麦克米伦', year: '1940', uses: '核科研、中子检测' },
+            'Pu': { name: '钚', atomicWeight: '(244)', electronConfig: '[Rn] 5f⁶ 7s²', discoverer: '格伦·西奥多·西博格', year: '1940', uses: '核武器、核反应堆' },
+            'Am': { name: '镅', atomicWeight: '(243)', electronConfig: '[Rn] 5f⁷ 7s²', discoverer: '格伦·西奥多·西博格', year: '1944', uses: '烟雾探测器、核电池' },
+            'Cm': { name: '锔', atomicWeight: '(247)', electronConfig: '[Rn] 5f⁷ 6d¹ 7s²', discoverer: '格伦·西奥多·西博格', year: '1944', uses: '核科研、核电池' },
+            'Bk': { name: '锫', atomicWeight: '(247)', electronConfig: '[Rn] 5f⁹ 7s²', discoverer: '格伦·西奥多·西博格', year: '1949', uses: '核科研' },
+            'Cf': { name: '锎', atomicWeight: '(251)', electronConfig: '[Rn] 5f¹⁰ 7s²', discoverer: '格伦·西奥多·西博格', year: '1950', uses: '核科研、医疗' },
+            'Es': { name: '锿', atomicWeight: '(252)', electronConfig: '[Rn] 5f¹¹ 7s²', discoverer: '格伦·西奥多·西博格', year: '1952', uses: '核科研' },
+            'Fm': { name: '镄', atomicWeight: '(257)', electronConfig: '[Rn] 5f¹² 7s²', discoverer: '格伦·西奥多·西博格', year: '1952', uses: '核科研' },
+            'Md': { name: '钔', atomicWeight: '(258)', electronConfig: '[Rn] 5f¹³ 7s²', discoverer: '格伦·西奥多·西博格', year: '1955', uses: '核科研' },
+            'No': { name: '锘', atomicWeight: '(259)', electronConfig: '[Rn] 5f¹⁴ 7s²', discoverer: '格伦·西奥多·西博格', year: '1958', uses: '核科研' },
+            'Lr': { name: '铹', atomicWeight: '(262)', electronConfig: '[Rn] 5f¹⁴ 6d¹ 7s²', discoverer: '格伦·西奥多·西博格', year: '1961', uses: '核科研' },
+            // 第七周期过渡金属和主族元素
+            'Rf': { name: '𬬻', atomicWeight: '(267)', electronConfig: '[Rn] 5f¹⁴ 6d² 7s²', discoverer: '乔尔乔·弗洛雷斯', year: '1964', uses: '核科研' },
+            'Db': { name: '𬭊', atomicWeight: '(270)', electronConfig: '[Rn] 5f¹⁴ 6d³ 7s²', discoverer: '阿尔伯特·吉奥索', year: '1970', uses: '核科研' },
+            'Sg': { name: '𬭳', atomicWeight: '(271)', electronConfig: '[Rn] 5f¹⁴ 6d⁴ 7s²', discoverer: '彼得·安布鲁斯特', year: '1974', uses: '核科研' },
+            'Bh': { name: '𬭛', atomicWeight: '(270)', electronConfig: '[Rn] 5f¹⁴ 6d⁵ 7s²', discoverer: '彼得·安布鲁斯特', year: '1981', uses: '核科研' },
+            'Hs': { name: '𬭶', atomicWeight: '(277)', electronConfig: '[Rn] 5f¹⁴ 6d⁶ 7s²', discoverer: '彼得·安布鲁斯特', year: '1984', uses: '核科研' },
+            'Mt': { name: '鿏', atomicWeight: '(276)', electronConfig: '[Rn] 5f¹⁴ 6d⁷ 7s²', discoverer: '彼得·安布鲁斯特', year: '1982', uses: '核科研' },
+            'Ds': { name: '𫟼', atomicWeight: '(281)', electronConfig: '[Rn] 5f¹⁴ 6d⁸ 7s²', discoverer: '彼得·安布鲁斯特', year: '1994', uses: '核科研' },
+            'Rg': { name: '𬬭', atomicWeight: '(282)', electronConfig: '[Rn] 5f¹⁴ 6d⁹ 7s¹', discoverer: '彼得·安布鲁斯特', year: '1994', uses: '核科研' },
+            'Cn': { name: '鿔', atomicWeight: '(285)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s²', discoverer: '彼得·安布鲁斯特', year: '1996', uses: '核科研' },
+            'Nh': { name: '鉨', atomicWeight: '(286)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹', discoverer: '尤里·奥加涅相', year: '2003', uses: '核科研' },
+            'Fl': { name: '𫓧', atomicWeight: '(289)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²', discoverer: '尤里·奥加涅相', year: '1998', uses: '核科研' },
+            'Mc': { name: '镆', atomicWeight: '(289)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³', discoverer: '尤里·奥加涅相', year: '2003', uses: '核科研' },
+            'Lv': { name: '𫟷', atomicWeight: '(293)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴', discoverer: '尤里·奥加涅相', year: '2000', uses: '核科研' },
+            'Ts': { name: '鿬', atomicWeight: '(294)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵', discoverer: '尤里·奥加涅相', year: '2010', uses: '核科研' },
+            'Og': { name: '鿫', atomicWeight: '(294)', electronConfig: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶', discoverer: '尤里·奥加涅相', year: '2006', uses: '核科研' }
+        };
+
+        // 获取所有周期表元素
+        const periodicElements = document.querySelectorAll('[data-element]');
+
+        // 添加元素点击事件
+        periodicElements.forEach(element => {
+            element.addEventListener('click', function() {
+                const elementSymbol = this.getAttribute('data-element');
+                const data = elementData[elementSymbol];
+
+                if (data) {
+                    elementDetail.innerHTML = `
+                        <button class="close-btn"><i class="fas fa-times"></i></button>
+                        <h3>${elementSymbol} - ${data.name}</h3>
+                        <p><strong>原子量:</strong> ${data.atomicWeight}</p>
+                        <p><strong>电子构型:</strong> ${data.electronConfig}</p>
+                        <p><strong>发现者:</strong> ${data.discoverer}</p>
+                        <p><strong>发现年份:</strong> ${data.year}</p>
+                        <p><strong>主要用途:</strong> ${data.uses}</p>
+                    `;
+
+                    elementDetail.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // 关闭按钮点击事件
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.close-btn') || e.target === overlay) {
+                elementDetail.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+
+        // 滚动动画实现
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        function checkReveal() {
+            const windowHeight = window.innerHeight;
+            const revealPoint = 150;
+
+            revealElements.forEach(element => {
+                const revealTop = element.getBoundingClientRect().top;
+
+                if (revealTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        checkReveal(); // 初始检查
+
         });
     </script>
 </body>
